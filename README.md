@@ -90,16 +90,57 @@ Docker makes it easy to run this app anywhere, with no setup headaches. Just fol
 
 - **Interactive Docs:** Visit `/docs` for Swagger UI.
 
-## How to Deploy on AWS EC2
 
-1. Launch an EC2 instance (Ubuntu).
-2. Copy your files to the server.
-3. Install Python and requirements.
-4. Run the app with Uvicorn:
+## How to Deploy on AWS EC2 (with Docker)
+
+Deploying with Docker is the easiest and most reliable way to run your app in the cloud. Here’s how to do it step by step:
+
+1. **Launch an EC2 instance (Ubuntu):**
+   - Go to the AWS Console → EC2 → Launch Instance.
+   - Choose Ubuntu Server 22.04 LTS (free tier eligible).
+   - Select t2.micro (free tier).
+   - Add a security group rule to allow TCP port 80 (for web traffic) and SSH (22) from your IP.
+
+2. **Connect to your EC2 instance:**
    ```bash
-   python3 -m uvicorn main:app --host 0.0.0.0 --port 80
+   ssh -i path/to/your-key.pem ubuntu@your-ec2-public-dns
    ```
-5. Open port 80 in your EC2 security group.
+   - Replace with your key and EC2 DNS.
+
+3. **Install Docker on EC2:**
+   ```bash
+   sudo apt update
+   sudo apt install -y docker.io
+   sudo systemctl start docker
+   sudo systemctl enable docker
+   sudo usermod -aG docker ubuntu
+   ```
+   - Log out and log back in to enable Docker for your user.
+
+4. **Get your project onto EC2:**
+   - **Option 1:** Copy from your computer:
+     ```bash
+     scp -i path/to/your-key.pem -r path/to/genai-chatbot-api ubuntu@your-ec2-public-dns:~
+     ```
+   - **Option 2:** Clone from GitHub:
+     ```bash
+     git clone https://github.com/tushr23/genai-chatbot-api.git
+     cd genai-chatbot-api
+     ```
+
+5. **Build and run your app with Docker:**
+   ```bash
+   docker build -t genai-chatbot-api .
+   docker run -d -p 80:8000 genai-chatbot-api
+   ```
+   - `-d` runs the app in the background.
+   - `-p 80:8000` maps public port 80 to your app’s port 8000.
+
+6. **Open your app in the browser:**
+   - Go to `http://your-ec2-public-dns/` in your browser.
+   - You should see your FastAPI docs at `/docs`.
+
+**Tip:** If you update your code, just repeat steps 5 to rebuild and restart your app.
 
 ## Example Request
 
