@@ -31,5 +31,5 @@ def get_logs():
     conn.close()
     return rows
 
-if __name__ == "__main__":
-    create_table()
+if __name__ == "__main__":  # pragma: no cover
+    create_table()           # pragma: no cover
