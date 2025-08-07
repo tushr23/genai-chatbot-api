@@ -5,6 +5,7 @@ A production-ready Generative AI Chatbot API built with Python, FastAPI, Hugging
 
 ![CI](https://github.com/tushr23/genai-chatbot-api/actions/workflows/ci.yml/badge.svg)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+[![codecov](https://codecov.io/gh/tushr23/genai-chatbot-api/graph/badge.svg?token=USR50RXZN8)](https://codecov.io/gh/tushr23/genai-chatbot-api)
 
 ## Features
 - Accepts user questions via API

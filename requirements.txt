@@ -3,3 +3,5 @@ uvicorn==0.35.0
 transformers
 requests
 torch
+pytest
+pytest-cov
