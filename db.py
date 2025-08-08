@@ -1,7 +1,16 @@
-import sqlite3
 
+# Import sqlite3 for database operations
+import sqlite3
+# Import os to read environment variables
+import os
+
+
+# Get the database name from environment variable, default to 'chatbot.db'
+DB_NAME = os.environ.get("DATABASE_NAME", "chatbot.db")
+
+# Function to get a connection to the database
 def get_connection():
-    return sqlite3.connect("chatbot.db")
+    return sqlite3.connect(DB_NAME)
 
 def create_table():
     conn = get_connection()
