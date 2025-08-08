@@ -68,12 +68,12 @@ class ChatRequest(BaseModel):
 # Chat endpoint
 @app.post("/v1/chat")
 @limiter.limit("5/minute")
-async def chat(request: ChatRequest, raw_request: FastAPIRequest):
+async def chat(body: ChatRequest, request: FastAPIRequest):
     from datetime import datetime, timezone
-    ip = raw_request.client.host if raw_request.client else "unknown"
-    logging.info(f"[CHAT] {datetime.now(timezone.utc).isoformat()} | IP: {ip} | Question: {request.question}")
+    ip = request.client.host if request.client else "unknown"
+    logging.info(f"[CHAT] {datetime.now(timezone.utc).isoformat()} | IP: {ip} | Question: {body.question}")
 
-    question = request.question.strip()
+    question = body.question.strip()
     if not question:
         logging.warning("Received empty question input.")
         return JSONResponse(
@@ -98,9 +98,9 @@ async def chat(request: ChatRequest, raw_request: FastAPIRequest):
 
 # Logs endpoint
 @app.get("/v1/logs")
-async def get_logs(raw_request: FastAPIRequest):
+async def get_logs(request: FastAPIRequest):
     from datetime import datetime, timezone
-    ip = raw_request.client.host if raw_request.client else "unknown"
+    ip = request.client.host if request.client else "unknown"
     logging.info(f"[LOGS] {datetime.now(timezone.utc).isoformat()} | IP: {ip} | Logs requested")
     logs = db.get_logs()
     return {"logs": logs}
